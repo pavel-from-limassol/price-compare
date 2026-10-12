@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+functions/node_modules/
+
+# Firebase / local
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+*.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,98 @@
+{
+  "currency": "EUR",
+  "updated_at": "2026-10-12T00:00:00+00:00",
+  "schema": "limassol-prices.catalog/v1",
+  "stores": [
+    {"id": "alphamega", "name": "Alphamega"},
+    {"id": "lidl", "name": "Lidl"},
+    {"id": "sklavenitis", "name": "Sklavenitis"},
+    {"id": "public", "name": "Public"}
+  ],
+  "products": [
+    {
+      "id": "milk-fresh-1l",
+      "name": "Fresh milk 1 L",
+      "aliases": ["milk 1l", "milk", "γάλα"],
+      "unit": "1 L",
+      "category": "dairy",
+      "offers": [
+        {"store_id": "alphamega", "price": 1.49, "url": null, "note": null},
+        {"store_id": "lidl", "price": 1.29, "url": null, "note": "Lidl own brand"},
+        {"store_id": "sklavenitis", "price": 1.39, "url": null, "note": null}
+      ]
+    },
+    {
+      "id": "eggs-m-10",
+      "name": "Eggs M, 10 pcs",
+      "aliases": ["eggs", "eggs 10"],
+      "unit": "10 pcs",
+      "category": "dairy",
+      "offers": [
+        {"store_id": "alphamega", "price": 3.20, "url": null, "note": null},
+        {"store_id": "lidl", "price": 2.79, "url": null, "note": null},
+        {"store_id": "sklavenitis", "price": 2.99, "url": null, "note": null}
+      ]
+    },
+    {
+      "id": "olive-oil-1l",
+      "name": "Extra Virgin olive oil 1 L",
+      "aliases": ["olive oil", "λάδι"],
+      "unit": "1 L",
+      "category": "grocery",
+      "offers": [
+        {"store_id": "alphamega", "price": 9.90, "url": null, "note": null},
+        {"store_id": "lidl", "price": 7.49, "url": null, "note": null},
+        {"store_id": "sklavenitis", "price": 8.75, "url": null, "note": null}
+      ]
+    },
+    {
+      "id": "coffee-ground-250g",
+      "name": "Ground coffee 250 g",
+      "aliases": ["coffee", "καφές"],
+      "unit": "250 g",
+      "category": "drinks",
+      "offers": [
+        {"store_id": "alphamega", "price": 4.50, "url": null, "note": null},
+        {"store_id": "lidl", "price": 3.69, "url": null, "note": null},
+        {"store_id": "sklavenitis", "price": 4.20, "url": null, "note": null},
+        {"store_id": "public", "price": 5.99, "url": null, "note": "premium brand"}
+      ]
+    },
+    {
+      "id": "pasta-500g",
+      "name": "Spaghetti pasta 500 g",
+      "aliases": ["pasta", "spaghetti"],
+      "unit": "500 g",
+      "category": "grocery",
+      "offers": [
+        {"store_id": "alphamega", "price": 1.15, "url": null, "note": null},
+        {"store_id": "lidl", "price": 0.79, "url": null, "note": null},
+        {"store_id": "sklavenitis", "price": 0.95, "url": null, "note": null}
+      ]
+    },
+    {
+      "id": "bananas-1kg",
+      "name": "Bananas 1 kg",
+      "aliases": ["banana", "μπανάνα"],
+      "unit": "1 kg",
+      "category": "produce",
+      "offers": [
+        {"store_id": "alphamega", "price": 1.89, "url": null, "note": null},
+        {"store_id": "lidl", "price": 1.49, "url": null, "note": null},
+        {"store_id": "sklavenitis", "price": 1.69, "url": null, "note": null}
+      ]
+    },
+    {
+      "id": "usb-c-cable",
+      "name": "USB-C cable 1 m",
+      "aliases": ["usb-c", "type-c", "usb c cable"],
+      "unit": "pcs",
+      "category": "electronics",
+      "offers": [
+        {"store_id": "public", "price": 12.90, "url": null, "note": null},
+        {"store_id": "alphamega", "price": 9.99, "url": null, "note": "accessories"},
+        {"store_id": "lidl", "price": 4.99, "url": null, "note": "Silvercrest"}
+      ]
+    }
+  ]
+}

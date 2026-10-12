@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: Limassol Prices API
+  description: >
+    Pilot price-comparison API for Cyprus-style demo stores.
+    No authentication. Catalog is demo data (not live scraping).
+  version: 0.1.0
+  contact:
+    name: Limassol Prices
+
+servers:
+  - url: /
+    description: Same origin (Firebase Hosting → Cloud Functions)
+
+tags:
+  - name: meta
+  - name: catalog
+  - name: compare
+
+paths:
+  /api/health:
+    get:
+      tags: [meta]
+      summary: Health check
+      operationId: health
+      responses:
+        "200":
+          description: Service is up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  service: { type: string }
+                  auth: { type: string, example: none }
+                  currency: { type: string, example: EUR }
+                  updated_at: { type: string, format: date-time }
+
+  /api/meta:
+    get:
+      tags: [meta]
+      summary: Catalog metadata
+      operationId: meta
+      responses:
+        "200":
+          description: Counts and schema info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schema: { type: string }
+                  currency: { type: string }
+                  updated_at: { type: string, format: date-time }
+                  store_count: { type: integer }
+                  product_count: { type: integer }
+                  auth: { type: string, example: none }
+                  openapi: { type: string, example: /openapi.yaml }
+
+  /api/stores:
+    get:
+      tags: [catalog]
+      summary: List stores
+      operationId: listStores
+      responses:
+        "200":
+          description: Store list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currency: { type: string }
+                  stores:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Store"
+
+  /api/products:
+    get:
+      tags: [catalog]
+      summary: List all products with offers
+      operationId: listProducts
+      responses:
+        "200":
+          description: Full product catalog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currency: { type: string }
+                  updated_at: { type: string, format: date-time }
+                  count: { type: integer }
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+
+  /api/products/{id}:
+    get:
+      tags: [catalog]
+      summary: Get one product by id
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+          example: milk-fresh-1l
+      responses:
+        "200":
+          description: Product with sorted offers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Unknown product id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/search:
+    get:
+      tags: [compare]
+      summary: Search products by name / alias
+      operationId: search
+      parameters:
+        - $ref: "#/components/parameters/Query"
+      responses:
+        "200":
+          description: Ranked matches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  currency: { type: string }
+                  count: { type: integer }
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "400":
+          description: Missing q
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/compare:
+    get:
+      tags: [compare]
+      summary: Compare offers for the best matching product
+      operationId: compare
+      parameters:
+        - $ref: "#/components/parameters/Query"
+      responses:
+        "200":
+          description: Best match plus alternatives
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  currency: { type: string }
+                  product:
+                    $ref: "#/components/schemas/Product"
+                  alternatives:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "400":
+          description: Missing q
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No match
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/cheapest:
+    get:
+      tags: [compare]
+      summary: Cheapest offer for the best matching product
+      operationId: cheapest
+      parameters:
+        - $ref: "#/components/parameters/Query"
+      responses:
+        "200":
+          description: Cheapest store offer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  currency: { type: string }
+                  product_id: { type: string }
+                  product_name: { type: string }
+                  unit: { type: string }
+                  cheapest:
+                    $ref: "#/components/schemas/Offer"
+                  all_offers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Offer"
+        "400":
+          description: Missing q
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No match or no offers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  parameters:
+    Query:
+      name: q
+      in: query
+      required: true
+      description: Free-text product query
+      schema: { type: string }
+      example: milk
+
+  schemas:
+    Store:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string }
+        name: { type: string }
+
+    Offer:
+      type: object
+      required: [store_id, store_name, price, currency]
+      properties:
+        store_id: { type: string }
+        store_name: { type: string }
+        price: { type: number, format: float }
+        currency: { type: string, example: EUR }
+        url: { type: string, nullable: true }
+        note: { type: string, nullable: true }
+
+    Product:
+      type: object
+      required: [id, name, offers]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        unit: { type: string }
+        category: { type: string }
+        aliases:
+          type: array
+          items: { type: string }
+        score: { type: number }
+        cheapest:
+          $ref: "#/components/schemas/Offer"
+        price_range:
+          type: object
+          properties:
+            min: { type: number }
+            max: { type: number }
+            currency: { type: string }
+        offers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Offer"
+
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+        hint: { type: string }
+        query: { type: string }
+        id: { type: string }
